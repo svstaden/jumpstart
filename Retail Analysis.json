@@ -1,0 +1,575 @@
+{
+  "paragraphs": [
+    {
+      "title": "Initialize",
+      "text": "%sql\nuse retail_db\n",
+      "user": "mpatel@qubole.com",
+      "dateUpdated": "Sep 19, 2017 11:32:55 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/sql",
+        "editorHide": false,
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491532340795_-1843291940",
+      "id": "20170407-023220_542635082",
+      "dateCreated": "Apr 7, 2017 2:32:20 AM",
+      "dateStarted": "Sep 19, 2017 11:32:55 PM",
+      "dateFinished": "Sep 19, 2017 11:32:56 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Top 10 Most Revenue Generating Products",
+      "text": "%sql\n\nselect p.product_name as `Product Name`, r.display_revenue as `Total Revenue Generated`\nfrom products p inner join\n(select oi.order_item_product_id, cast(round(sum(oi.order_item_subtotal)) as Int) as revenue, format_number(round(sum(oi.order_item_subtotal)), 0) as display_revenue\nfrom order_items oi inner join orders o\non oi.order_item_order_id \u003d o.order_id\nwhere o.order_status \u003c\u003e \u0027CANCELED\u0027\nand o.order_status \u003c\u003e \u0027SUSPECTED_FRAUD\u0027\ngroup by order_item_product_id) r\non p.product_id \u003d r.order_item_product_id\norder by r.revenue desc\nlimit 10",
+      "user": "mpatel@qubole.com",
+      "dateUpdated": "Sep 19, 2017 11:40:43 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "Product Name",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "Total Revenue Generated",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "Product Name",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "Total Revenue Generated",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/sql",
+        "editorHide": false,
+        "title": true,
+        "tableHide": false,
+        "lineNumbers": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491533052484_309003798",
+      "id": "20170407-024412_826334388",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "Product Name\tTotal Revenue Generated\nField \u0026 Stream Sportsman 16 Gun Fire Safe\t6,637,668\nPerfect Fitness Perfect Rip Deck\t4,233,794\nDiamondback Women\u0027s Serene Classic Comfort Bi\t3,946,837\nNike Men\u0027s Free 5.0+ Running Shoe\t3,507,549\nNike Men\u0027s Dri-FIT Victory Golf Polo\t3,011,650\nPelican Sunstream 100 Kayak\t2,967,852\nO\u0027Brien Men\u0027s Neoprene Life Vest\t2,765,543\nNike Men\u0027s CJ Elite 2 TD Football Cleat\t2,764,107\nUnder Armour Girls\u0027 Toddler Spine Surge Runni\t1,214,896\nadidas Youth Germany Black/Red Away Match Soc\t63,490\n"
+      },
+      "dateCreated": "Apr 7, 2017 2:44:12 AM",
+      "dateStarted": "Sep 19, 2017 11:40:43 PM",
+      "dateFinished": "Sep 19, 2017 11:40:50 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Top 10 Most Viewed Products",
+      "text": "%sql\nselect url as `Product Page URL`, product as `Product`, format_number(count(*),0)  as `Total Page Views` \nfrom (select url,\nregexp_replace(substring_index(substring(url, instr(url, \u0027/category/\u0027) + 10), \u0027/product/\u0027,1),\u0027%20\u0027, \u0027 \u0027) as category,\nregexp_replace(substring(url, instr(url, \u0027/product/\u0027) + 9), \u0027%20\u0027, \u0027 \u0027) as product\nfrom web_logs\nwhere url like \u0027%\\/product\\/%\u0027) s\ngroup by url, category, product\norder by count(*) desc\nlimit 10",
+      "user": "mpatel@qubole.com",
+      "dateUpdated": "Sep 19, 2017 11:53:23 PM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491595677231_-1911748829",
+      "id": "20170407-200757_2119095159",
+      "dateCreated": "Apr 7, 2017 8:07:57 PM",
+      "dateStarted": "Sep 19, 2017 11:53:23 PM",
+      "dateFinished": "Sep 19, 2017 11:53:27 PM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Interactive Chart: Orders By Month Range And Year",
+      "text": "%sql\nselect to_date(o.order_date) as `Order Date`, count(o.*) as `Total Orders` \nfrom orders o \nwhere month(o.order_date) between ${A\u003d\u003d1,1(Jan)|2(Feb)|3(Mar)|4(Apr)|5(May)|6(Jun)|7(Jul)|8(Aug)|9(Sep)|10(Oct)|11(Nov)|12(Dec)} and ${B\u003d\u003d2,1(Jan)|2(Feb)|3(Mar)|4(Apr)|5(May)|6(Jun)|7(Jul)|8(Aug)|9(Sep)|10(Oct)|11(Nov)|12(Dec)} \nand year(o.order_date) \u003d ${Year\u003d2014,2013|2014} \ngroup by to_date(o.order_date) \norder by to_date(o.order_date)",
+      "user": "mpatel@qubole.com",
+      "dateUpdated": "Sep 20, 2017 12:00:04 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "multiBarChart",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "Order Date",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "Total Orders",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "Order Date",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "Total Orders",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {
+          "Month2": "7",
+          "Year": "2014",
+          "Month1": "1",
+          "A": "1",
+          "B": "9",
+          "BMonth": "5",
+          "AMonth": "1",
+          "M2": "3",
+          "M1": "2"
+        },
+        "forms": {
+          "Year": {
+            "name": "Year",
+            "defaultValue": "2014",
+            "options": [
+              {
+                "value": "2013"
+              },
+              {
+                "value": "2014"
+              }
+            ],
+            "hidden": false
+          },
+          "A": {
+            "name": "A",
+            "defaultValue": "\u003d1",
+            "options": [
+              {
+                "value": "1",
+                "displayName": "Jan"
+              },
+              {
+                "value": "2",
+                "displayName": "Feb"
+              },
+              {
+                "value": "3",
+                "displayName": "Mar"
+              },
+              {
+                "value": "4",
+                "displayName": "Apr"
+              },
+              {
+                "value": "5",
+                "displayName": "May"
+              },
+              {
+                "value": "6",
+                "displayName": "Jun"
+              },
+              {
+                "value": "7",
+                "displayName": "Jul"
+              },
+              {
+                "value": "8",
+                "displayName": "Aug"
+              },
+              {
+                "value": "9",
+                "displayName": "Sep"
+              },
+              {
+                "value": "10",
+                "displayName": "Oct"
+              },
+              {
+                "value": "11",
+                "displayName": "Nov"
+              },
+              {
+                "value": "12",
+                "displayName": "Dec"
+              }
+            ],
+            "hidden": false
+          },
+          "B": {
+            "name": "B",
+            "defaultValue": "\u003d2",
+            "options": [
+              {
+                "value": "1",
+                "displayName": "Jan"
+              },
+              {
+                "value": "2",
+                "displayName": "Feb"
+              },
+              {
+                "value": "3",
+                "displayName": "Mar"
+              },
+              {
+                "value": "4",
+                "displayName": "Apr"
+              },
+              {
+                "value": "5",
+                "displayName": "May"
+              },
+              {
+                "value": "6",
+                "displayName": "Jun"
+              },
+              {
+                "value": "7",
+                "displayName": "Jul"
+              },
+              {
+                "value": "8",
+                "displayName": "Aug"
+              },
+              {
+                "value": "9",
+                "displayName": "Sep"
+              },
+              {
+                "value": "10",
+                "displayName": "Oct"
+              },
+              {
+                "value": "11",
+                "displayName": "Nov"
+              },
+              {
+                "value": "12",
+                "displayName": "Dec"
+              }
+            ],
+            "hidden": false
+          }
+        }
+      },
+      "jobName": "paragraph_1491532627822_-422785321",
+      "id": "20170407-023707_1430898616",
+      "dateCreated": "Apr 7, 2017 2:37:07 AM",
+      "dateStarted": "Sep 20, 2017 12:00:04 AM",
+      "dateFinished": "Sep 20, 2017 12:00:08 AM",
+      "status": "FINISHED",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Top 5 Products With Total Transactions Per Order Status",
+      "text": "%sql\nselect * from (select product_name as `Product Name`, \u0027Complete\u0027 as `Order Status`, count(*) as `Total Transactions`\nfrom order_items oi \njoin products p on (order_item_product_id \u003d product_id)\njoin orders o on (order_item_order_id \u003d order_id)\nwhere order_status \u003d \u0027COMPLETE\u0027\ngroup by order_status, product_name\norder by `Total Transactions` desc limit 5)\nunion\nselect * from (select product_name as name, \u0027Suspected Fraud\u0027 as status, count(*) as `Total Transactions`\nfrom order_items oi \njoin products p on (order_item_product_id \u003d product_id)\njoin orders o on (order_item_order_id \u003d order_id)\nwhere order_status \u003d \u0027SUSPECTED_FRAUD\u0027\ngroup by order_status, product_name\norder by `Total Transactions` desc limit 5)\nunion\nselect * from (select product_name as name, \u0027Pending Payment\u0027 as status, count(*) as `Total Transactions`\nfrom order_items oi \njoin products p on (order_item_product_id \u003d product_id)\njoin orders o on (order_item_order_id \u003d order_id)\nwhere order_status \u003d \u0027PENDING_PAYMENT\u0027\ngroup by order_status, product_name\norder by `Total Transactions` desc limit 5)\nunion\nselect * from (select product_name as name, \u0027Canceled\u0027 as status, count(*) as `Total Transactions`\nfrom order_items oi \njoin products p on (order_item_product_id \u003d product_id)\njoin orders o on (order_item_order_id \u003d order_id)\nwhere order_status \u003d \u0027CANCELED\u0027\ngroup by order_status, product_name\norder by `Total Transactions` desc limit 5)\norder by `Product Name`,`Order Status`\n",
+      "user": "mpatel@qubole.com",
+      "dateUpdated": "Sep 20, 2017 12:09:49 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "multiBarChart",
+          "height": 300.0,
+          "optionOpen": true,
+          "keys": [
+            {
+              "name": "Order Status",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "Total Transactions",
+              "index": 2.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "Product Name",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "Order Status",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491532672015_-409811128",
+      "id": "20170407-023752_1523894597",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "Product Name\tOrder Status\tTotal Transactions\nField \u0026 Stream Sportsman 16 Gun Fire Safe\tCanceled\t336\nField \u0026 Stream Sportsman 16 Gun Fire Safe\tComplete\t5645\nField \u0026 Stream Sportsman 16 Gun Fire Safe\tPending Payment\t3883\nField \u0026 Stream Sportsman 16 Gun Fire Safe\tSuspected Fraud\t394\nNike Men\u0027s CJ Elite 2 TD Football Cleat\tCanceled\t467\nNike Men\u0027s CJ Elite 2 TD Football Cleat\tComplete\t7370\nNike Men\u0027s CJ Elite 2 TD Football Cleat\tPending Payment\t4841\nNike Men\u0027s CJ Elite 2 TD Football Cleat\tSuspected Fraud\t516\nNike Men\u0027s Dri-FIT Victory Golf Polo\tCanceled\t438\nNike Men\u0027s Dri-FIT Victory Golf Polo\tComplete\t7037\nNike Men\u0027s Dri-FIT Victory Golf Polo\tPending Payment\t4643\nNike Men\u0027s Dri-FIT Victory Golf Polo\tSuspected Fraud\t481\nO\u0027Brien Men\u0027s Neoprene Life Vest\tCanceled\t389\nO\u0027Brien Men\u0027s Neoprene Life Vest\tComplete\t6348\nO\u0027Brien Men\u0027s Neoprene Life Vest\tPending Payment\t4238\nO\u0027Brien Men\u0027s Neoprene Life Vest\tSuspected Fraud\t439\nPerfect Fitness Perfect Rip Deck\tCanceled\t477\nPerfect Fitness Perfect Rip Deck\tComplete\t8071\nPerfect Fitness Perfect Rip Deck\tPending Payment\t5393\nPerfect Fitness Perfect Rip Deck\tSuspected Fraud\t560\n"
+      },
+      "dateCreated": "Apr 7, 2017 2:37:52 AM",
+      "dateStarted": "Sep 20, 2017 12:08:27 AM",
+      "dateFinished": "Sep 20, 2017 12:08:55 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Correlate Data: Top 10 Most Product Views vs. Revenue",
+      "text": "%sql\nSELECT product AS `Product`, substring(product,0,15) AS `Product Name`, count(*)/1000 AS `Total Page Views (in Thousands)`, round(COALESCE(r.revenue, 0)/1000000,2) AS `Total Revenue (in Millions)`\nFROM (SELECT url,\n   regexp_replace(substring_index(substring(url, instr(url, \u0027/category/\u0027) + 10), \u0027/product/\u0027,1),\u0027%20\u0027, \u0027 \u0027) AS category,\n   regexp_replace(substring(url, instr(url, \u0027/product/\u0027) + 9), \u0027%20\u0027, \u0027 \u0027) AS product\nFROM web_logs\nWHERE url like \u0027%\\/product\\/%\u0027) s\nLEFT JOIN\n    (SELECT p.product_name, cast(round(sum(oi.order_item_subtotal)) AS Int) AS revenue\n     FROM order_items oi\n     JOIN orders o ON oi.order_item_order_id \u003d o.order_id\n     JOIN products p ON p.product_id \u003d oi.order_item_product_id\n     WHERE o.order_status \u003c\u003e \u0027CANCELED\u0027\n     AND o.order_status \u003c\u003e \u0027SUSPECTED_FRAUD\u0027\n     GROUP BY p.product_name) r ON r.product_name \u003d product\nGROUP BY product, r.revenue\nORDER BY \u0027Total Revenue (in Millions)\u0027, `Total Page Views (in Thousands)` DESC\nLIMIT 10",
+      "user": "mpatel@qubole.com",
+      "dateUpdated": "Sep 20, 2017 12:28:07 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "multiBarChart",
+          "height": 300.0,
+          "optionOpen": true,
+          "keys": [
+            {
+              "name": "Product Name",
+              "index": 1.0,
+              "aggr": "sum",
+              "$$hashKey": "object:589"
+            }
+          ],
+          "values": [
+            {
+              "name": "Total Page Views (in Thousands)",
+              "index": 2.0,
+              "aggr": "sum",
+              "$$hashKey": "object:598"
+            },
+            {
+              "name": "Total Revenue (in Millions)",
+              "index": 3.0,
+              "aggr": "sum",
+              "$$hashKey": "object:599"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "Product",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "Product Name",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1502396963185_456486278",
+      "id": "20170810-202923_755964077",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "Product\tProduct Name\tTotal Page Views (in Thousands)\tTotal Revenue (in Millions)\nPerfect Fitness Perfect Rip Deck\tPerfect Fitness\t1.926\t4.23\nadidas Kids\u0027 RG III Mid Football Cleat\tadidas Kids\u0027 RG\t1.793\t0.0\nNike Men\u0027s Dri-FIT Victory Golf Polo\tNike Men\u0027s Dri-\t1.78\t3.01\nNike Men\u0027s CJ Elite 2 TD Football Cleat\tNike Men\u0027s CJ E\t1.757\t2.76\nPelican Sunstream 100 Kayak\tPelican Sunstre\t1.104\t2.97\nO\u0027Brien Men\u0027s Neoprene Life Vest\tO\u0027Brien Men\u0027s N\t1.084\t2.77\nDiamondback Women\u0027s Serene Classic Comfort Bi\tDiamondback Wom\t1.059\t3.95\nField \u0026 Stream Sportsman 16 Gun Fire Safe\tField \u0026 Stream \t1.028\t6.64\nNike Men\u0027s Free 5.0+ Running Shoe\tNike Men\u0027s Free\t1.004\t3.51\nUnder Armour Hustle Storm Medium Duffle Bag\tUnder Armour Hu\t0.939\t0.03\n"
+      },
+      "dateCreated": "Aug 10, 2017 8:29:23 PM",
+      "dateStarted": "Sep 20, 2017 12:28:07 AM",
+      "dateFinished": "Sep 20, 2017 12:28:18 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Advanced Analytics: Products Frequently Purchased Together",
+      "text": "val orderItemsByPName \u003d sqlContext.sql(\"SELECT oi.order_item_order_id, collect_set(p.product_name) products FROM order_items oi join products p ON (oi.order_item_product_id \u003d p.product_id ) group by oi.order_item_order_id order by oi.order_item_order_id\")\nimport org.apache.spark.mllib.fpm.FPGrowth\nimport scala.collection.mutable._\n// ProductCombinations class that holds (string of) products and the associated frequency\nclass ProductCombinations (var products: String, var freq: Long) extends Ordered [ProductCombinations] {\n    override def toString \u003d {\n        (products + \" bought ***\" + freq + \"*** time(s)\")\n    }\n    // return 0 if the same; negative if this \u003c that; positive if this \u003e that; used for sorting\n    def compare (that: ProductCombinations) \u003d {\n        if (this.freq \u003d\u003d that.freq) {\n            0\n        }\n        else if (this.freq \u003e that.freq) {\n            1\n        }\n        else {\n            -1\n        }\n    }\n}\nval orders \u003d orderItemsByPName.rdd.map(r \u003d\u003e {\n    r.getAs[WrappedArray[Int]](1).mkString(\",\").split(\",\")\n})\nval model \u003d new FPGrowth()\n  .setMinSupport(0)\n  .run(orders)\nvar PCList \u003d List[ProductCombinations]()\nmodel.freqItemsets.collect().foreach {\n    itemset \u003d\u003e {\n      var pc \u003d new ProductCombinations(itemset.items.mkString(\",\"), itemset.freq)\n      PCList \u003d pc :: PCList\n    }\n}",
+      "user": "mpatel@qubole.com",
+      "dateUpdated": "Sep 20, 2017 12:48:39 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1491532367016_604926608",
+      "id": "20170407-023247_685746710",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TEXT",
+        "msg": "\norderItemsByPName: org.apache.spark.sql.DataFrame \u003d [order_item_order_id: int, products: array\u003cstring\u003e]\n\nimport org.apache.spark.mllib.fpm.FPGrowth\n\nimport scala.collection.mutable._\n\ndefined class ProductCombinations\n\norders: org.apache.spark.rdd.RDD[Array[String]] \u003d MapPartitionsRDD[775] at map at \u003cconsole\u003e:45\n\nmodel: org.apache.spark.mllib.fpm.FPGrowthModel[String] \u003d org.apache.spark.mllib.fpm.FPGrowthModel@771d4be2\n\nPCList: List[ProductCombinations] \u003d List()\n"
+      },
+      "dateCreated": "Apr 7, 2017 2:32:47 AM",
+      "dateStarted": "Sep 20, 2017 12:48:39 AM",
+      "dateFinished": "Sep 20, 2017 12:49:02 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Advanced Analytics: Top 10 Combinations of Two Products Frequently Bought Together",
+      "text": "// Exclude entries with single products and display top 10 combinations of products bought together\nvar multipleProductCombos \u003d PCList.filter(p \u003d\u003e p.products.split(\",\").size \u003d\u003d 2)\n                                  .sortWith(_.freq \u003e _.freq).take(10)\n                                \nvar products \u003d multipleProductCombos.map { p \u003d\u003e\n    val splitted \u003d p.products.split(\",\")\n    (splitted(0), splitted(1), p.freq)\n}.toDF(\"Product1\", \"Product2\", \"Qty\")\nval aggregated \u003d products.groupBy(\"Product1\").agg(lit(\"\").alias(\"Product2\"), count(\"Product2\").alias(\"Count - Qty\"), sum(\"Qty\").alias(\"Sum - Qty\"))\nval productsRenamed \u003d products.select(products(\"Product1\"), products(\"Product2\"), lit(1).alias(\"Count - Qty\"), products(\"Qty\").alias(\"Sum - Qty\"))\nval merged \u003d  aggregated.unionAll(productsRenamed).sort(\"Product1\")\nvar result \u003d merged.select(expr(\"case when Product2 \u003d \u0027\u0027 then Product1 else \u0027\u0027 end\").alias(\"Product1\"), merged(\"Product2\"), merged(\"Count - Qty\"), merged(\"Sum - Qty\"))\nvar total \u003d aggregated.select(lit(\"Total Results\").alias(\"Product1\"), lit(\"\").alias(\"Product2\"), sum(\"Count - Qty\").alias(\"Count - Qty\"), sum(\"Sum - Qty\").alias(\"Sum - Qty\"))\nz.show(result.unionAll(total))",
+      "user": "mpatel@qubole.com",
+      "dateUpdated": "Sep 20, 2017 1:01:22 AM",
+      "config": {
+        "colWidth": 12.0,
+        "graph": {
+          "mode": "table",
+          "height": 300.0,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "Product1",
+              "index": 0.0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "Product2",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          ],
+          "groups": [],
+          "scatter": {
+            "xAxis": {
+              "name": "Product1",
+              "index": 0.0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "Product2",
+              "index": 1.0,
+              "aggr": "sum"
+            }
+          }
+        },
+        "enabled": true,
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1502397048115_598412650",
+      "id": "20170810-203048_979651842",
+      "result": {
+        "code": "SUCCESS",
+        "type": "TABLE",
+        "msg": "Product1\tProduct2\tCount - Qty\tSum - Qty\nField \u0026 Stream Sportsman 16 Gun Fire Safe\t\t3\t14006\n\tPerfect Fitness Perfect Rip Deck\t1\t4984\n\tNike Men\u0027s CJ Elite 2 TD Football Cleat\t1\t4651\n\tNike Men\u0027s Dri-FIT Victory Golf Polo\t1\t4371\nNike Men\u0027s CJ Elite 2 TD Football Cleat\t\t1\t6169\n\tPerfect Fitness Perfect Rip Deck\t1\t6169\nNike Men\u0027s Dri-FIT Victory Golf Polo\t\t2\t11332\n\tPerfect Fitness Perfect Rip Deck\t1\t5890\n\tNike Men\u0027s CJ Elite 2 TD Football Cleat\t1\t5442\n\tNike Men\u0027s Dri-FIT Victory Golf Polo\t1\t4795\nO\u0027Brien Men\u0027s Neoprene Life Vest\t\t3\t15342\n\tPerfect Fitness Perfect Rip Deck\t1\t5556\n\tNike Men\u0027s CJ Elite 2 TD Football Cleat\t1\t4991\nPelican Sunstream 100 Kayak\t\t1\t4400\n\tPerfect Fitness Perfect Rip Deck\t1\t4400\nTotal Results\t\t10\t51249\n"
+      },
+      "dateCreated": "Aug 10, 2017 8:30:48 PM",
+      "dateStarted": "Sep 20, 2017 1:01:22 AM",
+      "dateFinished": "Sep 20, 2017 1:01:26 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "jobName": "paragraph_1505746983646_1108244356",
+      "id": "20170918-150303_2001706473",
+      "dateCreated": "Sep 18, 2017 3:03:03 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Retail Analysis",
+  "id": "98YTPFDUVQ1505863291",
+  "angularObjects": {
+    "2CSGYZQ6Gnull1501659668586:shared_process": [],
+    "2CTWW3UHP3581505860091122:shared_process": [],
+    "2CP3E3U35null1501659668597:shared_process": [],
+    "2CSEYEG4Ynull1501659668591:shared_process": []
+  },
+  "config": {
+    "isDashboard": false
+  },
+  "info": {},
+  "source": "FCN"
+}
